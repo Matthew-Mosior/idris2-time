@@ -1,0 +1,12 @@
+package time
+
+authors    = "Matthew Mosior"
+brief      = "A time library"
+license    = "BSD-3 Clause"
+version    = 0.1.0
+sourcedir  = "src"
+depends    = base
+           , elab-util
+           , fixed
+modules    = Data.Time
+           , Data.Time.Calendar

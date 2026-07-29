@@ -1,0 +1,5 @@
+[custom.all.time]
+type = "local"
+path = "."
+ipkg = "time.ipkg"
+test = "test/test.ipkg"
