@@ -7,6 +7,13 @@ version    = 0.1.0
 sourcedir  = "src"
 depends    = base
            , elab-util
+           , finite
            , fixed
+           , ratio
 modules    = Data.Time
            , Data.Time.Calendar
+           , Data.Time.Calendar.Days
+           , Data.Time.Calendar.Internal
+           , Data.Time.Calendar.OrdinalDate
+           , Data.Time.Calendar.Types
+           , Data.Time.Calendar.Week
