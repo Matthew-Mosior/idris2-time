@@ -40,49 +40,46 @@ isLeapYear year =
 ||| Convert a `Day` to ISO 8601 Ordinal Date format.
 |||
 ||| Returns the Gregorian year and the 1-based day of year.
+|||
 public export
 toOrdinalDate : Day -> (Year, DayOfYear)
 toOrdinalDate (MkModifiedJulianDay mjd) =
-  let
-    a       = mjd + 678575
-    quadcent = div a 146097
-    b       = mod a 146097
-    cent    = min (div b 36524) 3
-    c       = b - (cent * 36524)
-    quad    = div c 1461
-    d       = mod c 1461
-    y       = min (div d 365) 3
-    yd      = cast (d - (y * 365) + 1)
-    year    = quadcent * 400 + cent * 100 + quad * 4 + y + 1
-  in
-    (year, yd)
+  let a        = mjd + 678575
+      quadcent = div a 146097
+      b        = mod a 146097
+      cent     = min (div b 36524) 3
+      c        = b - (cent * 36524)
+      quad     = div c 1461
+      d        = mod c 1461
+      y        = min (div d 365) 3
+      yd       = MkDayOfYear (d - (y * 365) + 1)
+      year     = quadcent * 400 + cent * 100 + quad * 4 + y + 1
+    in (year, yd)
 
 ||| Convert from ISO 8601 Ordinal Date format.
 |||
 ||| Invalid day numbers are clipped to the valid range:
 ||| 1 to 365 in a common year, or 1 to 366 in a leap year.
+|||
 public export
 fromOrdinalDate : Year -> DayOfYear -> Day
 fromOrdinalDate year day =
-  let
-    maxDay : DayOfYear
-    maxDay =
-      if isLeapYear year
-         then 366
-         else 365
-
-    clippedDay : DayOfYear
-    clippedDay = clip 1 maxDay day
-
-    y   = year - 1
-    mjd = cast clippedDay
-          + (365 * y)
-          + div y 4
-          - div y 100
-          + div y 400
-          - 678576
-  in
-    MkModifiedJulianDay mjd
+  let maxday     : DayOfYear
+      maxday     = case isLeapYear year of
+                     True  =>
+                       366
+                     False =>
+                       365
+      clippedday : DayOfYear
+      clippedday = clip 1 maxDay day
+      y          = year - 1
+      mjd        = cast clippedDay
+                 + (365 * y)
+                 + div y 4
+                 - div y 100
+                 + div y 400
+                 - 678576
+    in MkModifiedJulianDay mjd
 
 ||| Convert from ISO 8601 Ordinal Date format.
 |||
@@ -96,9 +93,7 @@ fromOrdinalDateValid year day = do
       if isLeapYear year
          then 366
          else 365
-
   day' <- clipValid 1 maxDay day
-
   let
     y   = year - 1
     mjd = cast day'
